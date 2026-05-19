@@ -1,0 +1,215 @@
+@extends('layouts.admin')
+
+@section('content')
+<div class="container-fluid py-4">
+    
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <a href="{{ route('admin.applications.pending') }}" class="btn btn-secondary btn-sm mb-2 shadow-sm">
+                <i class="fas fa-arrow-left"></i> Back to List
+            </a>
+            <h3 style="color: var(--ktvc-maroon); margin-bottom: 0;">
+                Review Application: {{ strtoupper($application->first_name . ' ' . $application->surname) }}
+            </h3>
+        </div>
+        
+        <div>
+            @if($application->status === 'approved')
+                <span class="badge bg-success fs-5 px-3 py-2 shadow-sm"><i class="fas fa-check-circle"></i> APPROVED</span>
+            @elseif($application->status === 'rejected')
+                <span class="badge bg-danger fs-5 px-3 py-2 shadow-sm"><i class="fas fa-times-circle"></i> REJECTED</span>
+            @else
+                <span class="badge bg-warning text-dark fs-5 px-3 py-2 shadow-sm"><i class="fas fa-hourglass-half"></i> PENDING</span>
+            @endif
+        </div>
+    </div>
+
+    @if(session('success'))
+        <div class="alert alert-success shadow-sm border-0"><i class="fas fa-check-circle"></i> {{ session('success') }}</div>
+    @endif
+
+    <div class="row">
+        <div class="col-lg-8">
+            
+            <div class="card shadow-sm border-0 mb-4" style="border-top: 4px solid var(--ktvc-maroon) !important;">
+                <div class="card-header bg-white pb-0 border-bottom-0 pt-3">
+                    <h5 class="fw-bold"><i class="fas fa-graduation-cap text-secondary"></i> Course Selection</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="text-muted small fw-bold mb-1">Course Applied For</label>
+                            <p class="fs-5 mb-0 fw-bold">{{ $application->course_name ?? 'N/A' }}</p>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="text-muted small fw-bold mb-1">Course Level</label>
+                            <p class="fs-5 mb-0"><span class="badge bg-secondary">{{ $application->course_level ?? 'N/A' }}</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card shadow-sm border-0 mb-4">
+                <div class="card-header bg-white pb-0 border-bottom-0 pt-3">
+                    <h5 class="fw-bold"><i class="fas fa-user text-secondary"></i> Personal Information</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label class="text-muted small fw-bold mb-1">First Name</label>
+                            <p class="mb-0 fw-bold">{{ $application->first_name ?? 'N/A' }}</p>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="text-muted small fw-bold mb-1">Middle Name</label>
+                            <p class="mb-0 fw-bold">{{ $application->middle_name ?? 'N/A' }}</p>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="text-muted small fw-bold mb-1">Surname</label>
+                            <p class="mb-0 fw-bold">{{ $application->surname ?? 'N/A' }}</p>
+                        </div>
+                        
+                        <div class="col-md-4 mb-3">
+                            <label class="text-muted small fw-bold mb-1">Gender</label>
+                            <p class="mb-0">{{ strtoupper($application->gender ?? 'N/A') }}</p>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="text-muted small fw-bold mb-1">Index / ID Number</label>
+                            <p class="mb-0">{{ $application->user->index_number ?? 'N/A' }}</p>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="text-muted small fw-bold mb-1">Date of Birth</label>
+                            <p class="mb-0">{{ $application->dob ?? 'N/A' }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card shadow-sm border-0 mb-4">
+                <div class="card-header bg-white pb-0 border-bottom-0 pt-3">
+                    <h5 class="fw-bold"><i class="fas fa-address-book text-secondary"></i> Contact Details</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="text-muted small fw-bold mb-1">Phone Number</label>
+                            <p class="mb-0">{{ $application->phone_number ?? 'N/A' }}</p>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="text-muted small fw-bold mb-1">Email Address</label>
+                            <p class="mb-0">{{ $application->user->email ?? 'N/A' }}</p>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="text-muted small fw-bold mb-1">Postal Address</label>
+                            <p class="mb-0">{{ $application->town_city ?? 'N/A' }}</p>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="text-muted small fw-bold mb-1">Next of Kin Contact</label>
+                            <p class="mb-0">{{ $application->next_of_kin_phone ?? 'N/A' }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="card shadow-sm border-0 mb-4" style="border-left: 4px solid #17a2b8 !important;">
+                <div class="card-header bg-white pb-0 border-bottom-0 pt-3">
+                    <h5 class="fw-bold"><i class="fas fa-file-pdf text-info"></i> Uploaded Documents</h5>
+                </div>
+                <div class="card-body">
+                    <p class="text-muted small mb-4">Click on any document below to securely view or download it in a new tab for verification.</p>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="text-dark fw-bold mb-2">National ID / Passport</label>
+                            @if(isset($application->uploadedDocument) && $application->uploadedDocument->id_document) 
+                                <a href="{{ asset('storage/' . $application->uploadedDocument->id_document) }}" target="_blank" class="btn btn-outline-info w-100 d-flex justify-content-between align-items-center shadow-sm">
+                                    <span><i class="fas fa-id-card me-2"></i> View ID Document</span>
+                                    <i class="fas fa-external-link-alt small"></i>
+                                </a>
+                            @else
+                                <div class="alert alert-light text-danger border border-danger mb-0 py-2 text-center">
+                                    <i class="fas fa-times-circle"></i> Not Uploaded
+                                </div>
+                            @endif
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="text-dark fw-bold mb-2">KCSE/KCPE Result Slip</label>
+                            @if(isset($application->uploadedDocument) && $application->uploadedDocument->result_slip) 
+                                <a href="{{ asset('storage/' . $application->uploadedDocument->result_slip) }}" target="_blank" class="btn btn-outline-info w-100 d-flex justify-content-between align-items-center shadow-sm">
+                                    <span><i class="fas fa-certificate me-2"></i> View Result Slip</span>
+                                    <i class="fas fa-external-link-alt small"></i>
+                                </a>
+                            @else
+                                <div class="alert alert-light text-danger border border-danger mb-0 py-2 text-center">
+                                    <i class="fas fa-times-circle"></i> Not Uploaded
+                                </div>
+                            @endif
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="text-dark fw-bold mb-2">Birth Certificate</label>
+                            @if($application->birth_certificate) <a href="{{ asset('storage/' . $application->birth_certificate) }}" target="_blank" class="btn btn-outline-info w-100 d-flex justify-content-between align-items-center shadow-sm">
+                                    <span><i class="fas fa-child me-2"></i> View Birth Cert</span>
+                                    <i class="fas fa-external-link-alt small"></i>
+                                </a>
+                            @else
+                                <div class="alert alert-light text-danger border border-danger mb-0 py-2 text-center">
+                                    <i class="fas fa-times-circle"></i> Not Uploaded
+                                </div>
+                            @endif
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label class="text-dark fw-bold mb-2">Passport Photo</label>
+                            @if($application->user->profile_picture) 
+                                <a href="{{ asset('storage/' . $application->user->profile_picture) }}" target="_blank" class="btn btn-outline-info w-100 d-flex justify-content-between align-items-center shadow-sm">
+                                    <span><i class="fas fa-camera me-2"></i> View Photo</span>
+                                    <i class="fas fa-external-link-alt small"></i>
+                                </a>
+                            @else
+                                <div class="alert alert-light text-danger border border-danger mb-0 py-2 text-center">
+                                    <i class="fas fa-times-circle"></i> Not Uploaded
+                                </div>
+                            @endif
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        <div class="col-lg-4">
+            <div class="card shadow border-0 sticky-top" style="top: 20px;">
+                <div class="card-header bg-dark text-white pt-3 pb-2">
+                    <h5 class="fw-bold mb-0"><i class="fas fa-gavel"></i> Registrar Decision</h5>
+                </div>
+                <div class="card-body bg-light">
+                    <p class="text-muted small mb-4">Review the applicant's details carefully. Approving this application will allow the student to download their official KTVC Admission Letter.</p>
+
+                    <form action="{{ route('admin.applications.status', $application->id) }}" method="POST">
+                        @csrf
+                        
+                        <button type="submit" name="status" value="approved" class="btn btn-success fw-bold w-100 py-3 mb-3 shadow-sm d-flex justify-content-center align-items-center" {{ $application->status === 'approved' ? 'disabled' : '' }}>
+                            <i class="fas fa-check-circle fs-4 me-2 mr-2"></i> Approve Application
+                        </button>
+
+                        <button type="submit" name="status" value="pending" class="btn btn-warning fw-bold w-100 py-2 mb-3 shadow-sm" {{ $application->status === 'pending' ? 'disabled' : '' }}>
+                            <i class="fas fa-undo"></i> Revert to Pending
+                        </button>
+
+                        <button type="submit" name="status" value="rejected" class="btn btn-outline-danger fw-bold w-100 py-2" {{ $application->status === 'rejected' ? 'disabled' : '' }} onclick="return confirm('Are you sure you want to reject this application?');">
+                            <i class="fas fa-times"></i> Deny Application
+                        </button>
+
+                    </form>
+                </div>
+                <div class="card-footer bg-white text-center py-3">
+                    <small class="text-muted">Application submitted on:<br><strong>{{ $application->created_at->format('l, d F Y \a\t h:i A') }}</strong></small>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+@endsection
