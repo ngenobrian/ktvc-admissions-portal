@@ -122,8 +122,9 @@
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label class="text-dark fw-bold mb-2">National ID / Passport</label>
-                            @if(isset($application->uploadedDocument) && $application->uploadedDocument->id_document) 
-                                <a href="{{ asset('storage/' . $application->uploadedDocument->id_document) }}" target="_blank" class="btn btn-outline-info w-100 d-flex justify-content-between align-items-center shadow-sm">
+                            @php $idDoc = $application->documents->where('document_type', 'national_id')->first(); @endphp
+                            @if($idDoc) 
+                                <a href="{{ asset('storage/' . $idDoc->file_path) }}" target="_blank" class="btn btn-outline-info w-100 d-flex justify-content-between align-items-center shadow-sm">
                                     <span><i class="fas fa-id-card me-2"></i> View ID Document</span>
                                     <i class="fas fa-external-link-alt small"></i>
                                 </a>
@@ -135,10 +136,26 @@
                         </div>
 
                         <div class="col-md-6 mb-3">
-                            <label class="text-dark fw-bold mb-2">KCSE/KCPE Result Slip</label>
-                            @if(isset($application->uploadedDocument) && $application->uploadedDocument->result_slip) 
-                                <a href="{{ asset('storage/' . $application->uploadedDocument->result_slip) }}" target="_blank" class="btn btn-outline-info w-100 d-flex justify-content-between align-items-center shadow-sm">
-                                    <span><i class="fas fa-certificate me-2"></i> View Result Slip</span>
+                            <label class="text-dark fw-bold mb-2">KCSE Result Slip / Cert</label>
+                            @php $kcseDoc = $application->documents->where('document_type', 'kcse')->first(); @endphp
+                            @if($kcseDoc) 
+                                <a href="{{ asset('storage/' . $kcseDoc->file_path) }}" target="_blank" class="btn btn-outline-info w-100 d-flex justify-content-between align-items-center shadow-sm">
+                                    <span><i class="fas fa-certificate me-2"></i> View KCSE</span>
+                                    <i class="fas fa-external-link-alt small"></i>
+                                </a>
+                            @else
+                                <div class="alert alert-light text-danger border border-danger mb-0 py-2 text-center">
+                                    <i class="fas fa-times-circle"></i> Not Uploaded
+                                </div>
+                            @endif
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label class="text-dark fw-bold mb-2">KCPE Result Slip / Cert</label>
+                            @php $kcpeDoc = $application->documents->where('document_type', 'kcpe')->first(); @endphp
+                            @if($kcpeDoc) 
+                                <a href="{{ asset('storage/' . $kcpeDoc->file_path) }}" target="_blank" class="btn btn-outline-info w-100 d-flex justify-content-between align-items-center shadow-sm">
+                                    <span><i class="fas fa-certificate me-2"></i> View KCPE</span>
                                     <i class="fas fa-external-link-alt small"></i>
                                 </a>
                             @else
@@ -150,7 +167,9 @@
 
                         <div class="col-md-6 mb-3">
                             <label class="text-dark fw-bold mb-2">Birth Certificate</label>
-                            @if($application->birth_certificate) <a href="{{ asset('storage/' . $application->birth_certificate) }}" target="_blank" class="btn btn-outline-info w-100 d-flex justify-content-between align-items-center shadow-sm">
+                            @php $birthDoc = $application->documents->where('document_type', 'birth_cert')->first(); @endphp
+                            @if($birthDoc) 
+                                <a href="{{ asset('storage/' . $birthDoc->file_path) }}" target="_blank" class="btn btn-outline-info w-100 d-flex justify-content-between align-items-center shadow-sm">
                                     <span><i class="fas fa-child me-2"></i> View Birth Cert</span>
                                     <i class="fas fa-external-link-alt small"></i>
                                 </a>
@@ -163,7 +182,7 @@
                         
                         <div class="col-md-6 mb-3">
                             <label class="text-dark fw-bold mb-2">Passport Photo</label>
-                            @if($application->user->profile_picture) 
+                            @if($application->user && $application->user->profile_picture) 
                                 <a href="{{ asset('storage/' . $application->user->profile_picture) }}" target="_blank" class="btn btn-outline-info w-100 d-flex justify-content-between align-items-center shadow-sm">
                                     <span><i class="fas fa-camera me-2"></i> View Photo</span>
                                     <i class="fas fa-external-link-alt small"></i>
