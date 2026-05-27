@@ -164,14 +164,14 @@
                                     <div class="col-md-6"> 
                                         <label class="form-label">Father's Phone Number *</label>
                                         <input type="tel" 
-                                               class="form-control" 
-                                               name="phone_number" 
-                                               value="{{ old('father_phone', $application->emergencyContacts->where('contact_type', 'father')->first()->phone_number ?? '') }}" 
-                                               pattern="[0-9]{10}" 
-                                               maxlength="10" 
-                                               title="Please enter exactly 10 digits (e.g., 0712345678)" 
-                                               required>
-                                        
+                                            class="form-control" 
+                                            name="father_phone" 
+                                            value="{{ old('father_phone', $application->emergencyContacts->where('contact_type', 'father')->first()->phone_number ?? '') }}" 
+                                            pattern="[0-9]{10}" 
+                                            maxlength="10" 
+                                            title="Please enter exactly 10 digits (e.g., 0712345678)" 
+                                            required>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -188,13 +188,13 @@
                                         <div class="col-md-6"> 
                                         <label class="form-label">Mother's Phone Number *</label>
                                         <input type="tel" 
-                                               class="form-control" 
-                                               name="phone_number" 
-                                               value="{{ old('mother_phone', $application->emergencyContacts->where('contact_type', 'mother')->first()->phone_number ?? '') }}" 
-                                               pattern="[0-9]{10}" 
-                                               maxlength="10" 
-                                               title="Please enter exactly 10 digits (e.g., 0712345678)" 
-                                               required>
+                                            class="form-control" 
+                                            name="mother_phone" 
+                                            value="{{ old('mother_phone', $application->emergencyContacts->where('contact_type', 'mother')->first()->phone_number ?? '') }}" 
+                                            pattern="[0-9]{10}" 
+                                            maxlength="10" 
+                                            title="Please enter exactly 10 digits (e.g., 0712345678)" 
+                                            required>
                                         
                                     </div>
                                     </div>
@@ -469,11 +469,13 @@ if ($('#kcse_grade').val()) {
             
             if (isAlive) {
                 $(targetSection).slideDown();
-                // We remove the strict 'required' attribute here so autosave works smoothly
-                // Validation will catch it on final submission anyway!
+                // Turn the required rule BACK ON when the section is visible
+                $(targetSection).find('input[type="tel"]').prop('required', true);
             } else {
                 $(targetSection).slideUp();
                 $(targetSection).find('input').val('');
+                // Turn the required rule OFF so it doesn't invisibly block the form!
+                $(targetSection).find('input[type="tel"]').prop('required', false);
             }
         });
         
