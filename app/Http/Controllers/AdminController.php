@@ -7,27 +7,32 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\ApprovedStudentsExport;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\ApplicationReviewed;
-
 use App\Models\Application;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class AdminController extends Controller
 {
-    // Admin Analytics Dashboard
+    // 1. Admin Analytics Dashboard
     public function dashboard()
     {
-        // 1. Top Level Metrics
-        $totalApplications = \App\Models\Application::count();
-        $pendingApplications = \App\Models\Application::where('status', 'pending')->count();
-        $approvedApplications = \App\Models\Application::where('status', 'approved')->count();
-        $rejectedApplications = \App\Models\Application::where('status', 'rejected')->count();
+        $statusCounts = Application::selectRaw('status, count(*) as total')
+            ->groupBy('status')
+            ->pluck('total', 'status');
 
-        // 2. Chart Data: Applications by Course
-        $coursesData = \App\Models\Application::select('course_name', \Illuminate\Support\Facades\DB::raw('count(*) as total'))
+        $pendingApplications = ($statusCounts['pending'] ?? 0) + ($statusCounts['submitted'] ?? 0);
+        $approvedApplications = $statusCounts['approved'] ?? 0;
+        $rejectedApplications = $statusCounts['rejected'] ?? 0;
+
+        $totalApplications = $pendingApplications + $approvedApplications + $rejectedApplications;
+
+        $coursesData = Application::select('course_name', DB::raw('count(*) as total'))
+            ->where('status', 'approved')
             ->groupBy('course_name')
             ->pluck('total', 'course_name');
 
-        // 3. Chart Data: Gender Distribution
-        $genderData = \App\Models\Application::select('gender', \Illuminate\Support\Facades\DB::raw('count(*) as total'))
+        $genderData = Application::select('gender', DB::raw('count(*) as total'))
+            ->where('status', 'approved')
             ->groupBy('gender')
             ->pluck('total', 'gender');
 
@@ -36,112 +41,71 @@ class AdminController extends Controller
             'coursesData', 'genderData'
         ));
     }
-    // Show the list of pending applications for the Registrar
-    public function pendingApplications()
-    {
-        // Fetch applications that are submitted, along with their associated user data
-        $applications = Application::with('user')
-            ->where('status', 'submitted')
-            ->orderBy('created_at', 'asc')
-            ->get();
 
-        return view('admin.applications.pending', compact('applications'));
-    }
-
-    // View a single application in detail
-    public function showApplication($id)
-    {
-        $application = Application::with(['user', 'address', 'emergencyContacts', 'documents'])->findOrFail($id);
-        
-        return view('admin.applications.show', compact('application'));
-    }
-
-    
-    /* public function updateStatus(Request $request, $id)
-    {
-        $request->validate([
-            'status' => 'required|in:approved,rejected',
-            // Rejection reason is ONLY required if the status is 'rejected'
-            'rejection_reason' => 'required_if:status,rejected|string|max:1000|nullable', 
-        ]);
-
-        $application = Application::findOrFail($id);
-        
-        $application->status = $request->status;
-        
-        if ($request->status == 'rejected') {
-            $application->rejection_reason = $request->rejection_reason;
-            // Optional: You can trigger a Mail notification here to alert the trainee
-        } else {
-            // If approved, clear any previous rejection reasons
-            $application->rejection_reason = null; 
-            
-            // Optional: Generate Admission Number and Letter here (like we discussed earlier)
-        }
-
-        $application->save();
-
-        // Save the changes to the database first
-        $application->save();
-
-        // Send the Email Notification (Check if the user actually has an email address first)
-        if ($application->user && $application->user->email) {
-            try {
-                Mail::to($application->user->email)->send(new ApplicationReviewed($application));
-            } catch (\Exception $e) {
-                // If the email fails (e.g., bad SMTP settings), don't break the whole app. 
-                // Just log the error or flash a warning to the admin.
-                \Log::error('Mail failed to send: ' . $e->getMessage());
-                return redirect()->route('admin.applications.pending')
-                    ->with('success', 'Application status updated, but the email notification failed to send.');
-            }
-        }
-
-        // Return back to the dashboard with the success message
-        $message = $request->status == 'approved' ? 'Application Approved Successfully!' : 'Application Rejected. The trainee has been notified.';
-        return redirect()->route('admin.applications.pending')->with('success', $message);
-    } */
-
-    // Export Approved Students to Excel
-    public function exportApprovedStudents()
-    {
-        return Excel::download(new ApprovedStudentsExport, 'KTVC_Approved_Students_' . date('Y_m_d') . '.xlsx');
-    }
-
-    // 1. List all applications
+    // 2. List all applications (Handles pending, approved, rejected via URL ?status= filter)
     public function index(Request $request)
     {
-        // Default to showing 'pending' applications, but allow filtering via URL
         $status = $request->query('status', 'pending'); 
 
-        $applications = \App\Models\Application::with('user')
-            ->where('status', $status)
+        // Included fallback for 'submitted' just in case old records exist
+        $applications = Application::with('user')
+            ->whereIn('status', [$status, $status === 'pending' ? 'submitted' : $status])
             ->latest()
             ->paginate(15);
 
         return view('admin.applications.index', compact('applications', 'status'));
     }
 
-    // 2. View a single application in detail
+    // 3. View a single application in detail
     public function show($id)
     {
-        $application = \App\Models\Application::with('user')->findOrFail($id);
+        $application = Application::with(['user', 'address', 'emergencyContacts', 'documents'])->findOrFail($id);
         
         return view('admin.applications.show', compact('application'));
     }
 
-    // 3. Update the status (Approve or Reject)
+    // 4. Update the status and send emails
     public function updateStatus(Request $request, $id)
     {
         $request->validate([
             'status' => 'required|in:approved,rejected,pending',
+            'rejection_reason' => 'required_if:status,rejected|string|max:1000|nullable', 
         ]);
 
-        $application = \App\Models\Application::findOrFail($id);
-        $application->update([
-            'status' => $request->status
-        ]);
+        $application = Application::findOrFail($id);
+        $application->status = $request->status;
+        
+        if ($request->status === 'rejected') {
+            $application->rejection_reason = $request->rejection_reason;
+        } else {
+            // Clear rejection reason if approved or set back to pending
+            $application->rejection_reason = null; 
+        }
 
-        return back()->with('success', 'Application status updated to ' . ucfirst($request->status) . ' successfully!');
+        $application->save();
+
+        // Send Email Notification if Approved or Rejected
+        if (in_array($request->status, ['approved', 'rejected']) && $application->user && $application->user->email) {
+            try {
+                Mail::to($application->user->email)->send(new ApplicationReviewed($application));
+            } catch (\Exception $e) {
+                Log::error('Mail failed to send: ' . $e->getMessage());
+                return back()->with('success', 'Application ' . $request->status . ', but the email notification failed to send.');
+            }
+        }
+
+        $message = $request->status === 'approved' 
+            ? 'Application Approved Successfully! Notification sent.' 
+            : 'Application status updated to ' . ucfirst($request->status) . '.';
+            
+        return back()->with('success', $message);
     }
+
+    // 5. Export Approved Students to Excel
+    public function exportApprovedStudents()
+    {
+        return Excel::download(new ApprovedStudentsExport, 'KTVC_Approved_Students_' . date('Y_m_d') . '.xlsx');
+    }
+
+    
 }

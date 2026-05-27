@@ -51,6 +51,42 @@
                     <p class="mb-1 text-muted">P.O BOX 10882-30100, Eldoret, Kenya</p>
                     <p class="mb-1 text-muted"><span style="color: #C89D3C;">Email:</span> info@ktvc.ac.ke</p>
                     <p class="mb-1 text-muted"><span style="color: #C89D3C;">Tel:</span> 0717 130 180</p>
+                    <div style="margin-top: 1.5rem;">
+    <h4 style="margin-bottom: 10px; font-weight: 600; color: #333;">Connect With Us</h4>
+    <div style="display: flex; flex-wrap: wrap; gap: 15px; align-items: center;">
+        
+        <a href="https://facebook.com/KipkabusTVC" target="_blank" rel="noopener noreferrer" style="display: flex; align-items: center; gap: 8px; text-decoration: none; color: #1877F2; font-weight: 500; transition: opacity 0.2s;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z"/>
+            </svg>
+            <span>@KipkabusTVC</span>
+        </a>
+
+        <a href="https://instagram.com/kipkabustvc" target="_blank" rel="noopener noreferrer" style="display: flex; align-items: center; gap: 8px; text-decoration: none; color: #E1306C; font-weight: 500; transition: opacity 0.2s;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+            </svg>
+            <span>@kipkabustvc</span>
+        </a>
+
+        <a href="https://x.com/kipkabustvc" target="_blank" rel="noopener noreferrer" style="display: flex; align-items: center; gap: 8px; text-decoration: none; color: #000000; font-weight: 500; transition: opacity 0.2s;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+            </svg>
+            <span>@kipkabustvc</span>
+        </a>
+
+        <a href="https://tiktok.com/@kipkabustvc" target="_blank" rel="noopener noreferrer" style="display: flex; align-items: center; gap: 8px; text-decoration: none; color: #000000; font-weight: 500; transition: opacity 0.2s;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/>
+            </svg>
+            <span>@kipkabustvc</span>
+        </a>
+
+    </div>
+</div>
                 </div>
 
                 <div class="d-flex flex-column flex-sm-row justify-content-center justify-content-lg-start gap-3">
@@ -113,8 +149,8 @@
                             <form method="POST" action="{{ route('login') }}">
                                 @csrf
                                 <div class="mb-3">
-                                    <label class="form-label small fw-bold text-muted">Email / Index Number</label>
-                                    <input type="text" name="login_id" class="form-control" placeholder="e.g. info@domain.com or 12345678" required>
+                                    <label class="form-label small fw-bold text-muted">Email</label>
+                                    <input type="text" name="login_id" class="form-control" placeholder="e.g. info@domain.com" required>
                                     @error('login_id') <small class="text-danger">{{ $message }}</small> @enderror
                                 </div>
                                 <div class="mb-4">
@@ -129,7 +165,7 @@
                                     <a href="{{ route('password.request') }}" class="small text-decoration-none" style="color: #7B1818;">Forgot Password?</a>
                                 </div>
                                 <button type="submit" class="btn w-100 fw-bold py-2" style="background-color: #1a2b4c; color: white;">
-                                    SECURE LOGIN
+                                    LOGIN
                                 </button>
                             </form>
                         </div>

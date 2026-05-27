@@ -91,9 +91,9 @@ class AuthController extends Controller
                 // return redirect()->route('password.change.prompt');
             }
 
-            // TRAFFIC DIRECTOR: Check if the user is an administrator
-            // (Checks for specific roles OR if they have any granular permissions assigned)
-            if ($user->hasAnyRole(['Super Admin', 'Registrar']) || $user->permissions->count() > 0) {
+            // TRAFFIC DIRECTOR: Check if the user is staff
+            // (Routes anyone who is NOT a trainee to the admin dashboard)
+            if ($user->role && strtolower($user->role) !== 'trainee') {
                 return redirect()->intended(route('admin.dashboard'))->with('success', 'Logged in to Admin Portal.');
             }
 

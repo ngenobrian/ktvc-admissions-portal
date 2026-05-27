@@ -51,39 +51,45 @@ Route::middleware('auth')->group(function () {
     Route::post('/application/submit', [App\Http\Controllers\ApplicationController::class, 'store'])->name('application.submit');
     Route::get('/application/admission-letter', [App\Http\Controllers\ApplicationController::class, 'downloadAdmissionLetter'])->name('application.letter.download');
 
-    // Admin Routes (Protected by auth AND role middleware)
-Route::middleware(['auth', 'role:super_admin,registrar,principal'])->prefix('admin')->name('admin.')->group(function () {
-    
-    // Registrar Application Management
-    //Route::get('/applications/pending', [App\Http\Controllers\AdminController::class, 'pendingApplications'])->name('applications.pending');
-    Route::get('/applications/{id}', [App\Http\Controllers\AdminController::class, 'showApplication'])->name('applications.show');
-    // Add this right below your admin.applications.show route
-    Route::post('/applications/{id}/status', [App\Http\Controllers\AdminController::class, 'updateStatus'])->name('applications.status');
-    
-});
-// Admin Panel Routes
-Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'force_password_change', 'role:Super Admin|Registrar']], function () {
-    
-    // 1. Dashboard & Analytics
-    Route::get('/dashboard', [App\Http\Controllers\AdminController::class, 'dashboard'])->name('admin.dashboard');
-    Route::get('/export-approved', [App\Http\Controllers\AdminController::class, 'exportApprovedStudents'])->name('admin.export.approved');
+ // Admin Panel Routes (Protected by auth AND our custom AdminAccess middleware)
+    Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'force_password_change', \App\Http\Middleware\AdminAccess::class]], function () {
+        
+        // 1. Dashboard & Analytics
+        Route::get('/dashboard', [App\Http\Controllers\AdminController::class, 'dashboard'])->name('admin.dashboard');
+        Route::get('/export-approved', [App\Http\Controllers\AdminController::class, 'exportApprovedStudents'])->name('admin.export.approved');
 
-    // 2. Manage Applications
-    Route::get('/applications', [App\Http\Controllers\AdminController::class, 'index'])->name('admin.applications.pending');
-    Route::get('/applications/{id}', [App\Http\Controllers\AdminController::class, 'show'])->name('admin.applications.show');
-    Route::post('/applications/{id}/status', [App\Http\Controllers\AdminController::class, 'updateStatus'])->name('admin.applications.status');
+        // 2. Manage Applications
+        Route::get('/applications', [App\Http\Controllers\AdminController::class, 'index'])->name('admin.applications.pending');
+        Route::get('/applications/{id}', [App\Http\Controllers\AdminController::class, 'show'])->name('admin.applications.show');
+        Route::post('/applications/{id}/status', [App\Http\Controllers\AdminController::class, 'updateStatus'])->name('admin.applications.status');
 
-    // 3. Manage Enquiries
-    Route::get('/enquiries', [App\Http\Controllers\EnquiryController::class, 'index'])->name('admin.enquiries.index');
-    Route::post('/enquiries/{id}/reply', [App\Http\Controllers\EnquiryController::class, 'reply'])->name('admin.enquiries.reply');
+        // 3. Manage Enquiries
+        Route::get('/enquiries', [App\Http\Controllers\EnquiryController::class, 'index'])->name('admin.enquiries.index');
+        Route::post('/enquiries/{id}/reply', [App\Http\Controllers\EnquiryController::class, 'reply'])->name('admin.enquiries.reply');
 
-    // 4. Staff Management (Strictly locked to Super Admins only)
-    Route::group(['middleware' => ['role:Super Admin']], function () {
-        Route::get('/users', [App\Http\Controllers\UserController::class, 'index'])->name('admin.users.index');
-        Route::get('/users/create', [App\Http\Controllers\UserController::class, 'create'])->name('admin.users.create');
-        Route::post('/users/store', [App\Http\Controllers\UserController::class, 'store'])->name('admin.users.store');
-        Route::get('/users/{user}/edit', [App\Http\Controllers\UserController::class, 'edit'])->name('admin.users.edit');
-        Route::put('/users/{user}', [App\Http\Controllers\UserController::class, 'update'])->name('admin.users.update');
+        // 4. Staff Management (Strictly locked to super_admin only via inline middleware)
+        Route::group(['middleware' => [function ($request, $next) {
+            if (auth()->check() && auth()->user()->role === 'super_admin') {
+                return $next($request);
+            }
+            return redirect()->route('admin.dashboard')->with('error', 'Only Super Admins can access staff management.');
+        }]], function () {
+            
+            // Users Management
+            Route::get('/users', [App\Http\Controllers\UserController::class, 'index'])->name('admin.users.index');
+            Route::get('/users/create', [App\Http\Controllers\UserController::class, 'create'])->name('admin.users.create');
+            Route::post('/users/store', [App\Http\Controllers\UserController::class, 'store'])->name('admin.users.store');
+            Route::get('/users/{user}/edit', [App\Http\Controllers\UserController::class, 'edit'])->name('admin.users.edit');
+            Route::put('/users/{user}', [App\Http\Controllers\UserController::class, 'update'])->name('admin.users.update');
+            Route::delete('/users/{id}/archive', [App\Http\Controllers\UserController::class, 'archive'])->name('admin.users.archive');
+            Route::post('/users/{id}/restore', [App\Http\Controllers\UserController::class, 'restore'])->name('admin.users.restore');
+            
+            // Role Management
+            Route::get('/roles', [App\Http\Controllers\RoleController::class, 'index'])->name('admin.roles.index');
+            Route::post('/roles/store', [App\Http\Controllers\RoleController::class, 'store'])->name('admin.roles.store');
+            Route::get('/roles/{id}/edit', [App\Http\Controllers\RoleController::class, 'edit'])->name('admin.roles.edit'); // New!
+            Route::put('/roles/{id}', [App\Http\Controllers\RoleController::class, 'update'])->name('admin.roles.update'); // New!
+            Route::delete('/roles/{id}', [App\Http\Controllers\RoleController::class, 'destroy'])->name('admin.roles.destroy');
+        });
     });
-});
-});
+}); 

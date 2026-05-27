@@ -73,7 +73,7 @@
         <div class="col-md-8">
             <div class="card shadow-sm border-0">
                 <div class="card-header bg-white border-bottom-0 pt-4 pb-0">
-                    <h5 class="fw-bold"><i class="fas fa-book-reader"></i> Applications by Course</h5>
+                    <h5 class="fw-bold"><i class="fas fa-book-reader"></i> Approved applications by Course</h5>
                 </div>
                 <div class="card-body">
                     <canvas id="courseChart" height="120"></canvas>

@@ -7,11 +7,12 @@ use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class User extends Authenticatable
 {
     /** @use HasFactory<UserFactory> */
-    use HasFactory, Notifiable, HasRoles;
+    use HasFactory, Notifiable, HasRoles, SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -54,5 +55,26 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+    public function systemRole()
+    {
+        // Renamed to avoid colliding with the 'role' database column
+        return $this->belongsTo(Role::class, 'role', 'name');
+    }
+
+    // Custom Permission Checker
+    public function hasPermission($permission)
+    {
+        // 1. Super Admin gets an automatic VIP pass to everything
+        if ($this->role === 'super_admin') {
+            return true;
+        }
+
+        // 2. Check if the user has a custom role with permissions assigned
+        if ($this->systemRole && is_array($this->systemRole->permissions)) {
+            return in_array($permission, $this->systemRole->permissions);
+        }
+
+        return false;
     }
 }

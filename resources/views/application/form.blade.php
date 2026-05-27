@@ -12,19 +12,19 @@
                     
                     <ul class="nav nav-pills nav-fill mb-4 border-bottom pb-3" id="applicationTabs" role="tablist">
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link active fw-bold" id="step1-tab" data-bs-toggle="tab" data-bs-target="#step1" type="button" role="tab">1. Personal Info</button>
+                            <button class="nav-link active fw-bold" id="step1-tab" data-bs-target="#step1" type="button" role="tab" style="pointer-events: none;">1. Personal Info</button>
                         </li>
                         <li class="nav-item" role="presentation">
-                        <button class="nav-link fw-bold" id="step2-tab" data-bs-toggle="tab" data-bs-target="#step2" type="button" role="tab">2. Course Selection</button>
+                            <button class="nav-link fw-bold" id="step2-tab" data-bs-target="#step2" type="button" role="tab" style="pointer-events: none;">2. Course Selection</button>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link fw-bold" id="step3-tab" data-bs-toggle="tab" data-bs-target="#step3" type="button" role="tab">2. Family & Guardians</button>
+                            <button class="nav-link fw-bold" id="step3-tab" data-bs-target="#step3" type="button" role="tab" style="pointer-events: none;">3. Family & Guardians</button>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link fw-bold" id="step4-tab" data-bs-toggle="tab" data-bs-target="#step4" type="button" role="tab">3. Location Details</button>
+                            <button class="nav-link fw-bold" id="step4-tab" data-bs-target="#step4" type="button" role="tab" style="pointer-events: none;">4. Location Details</button>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link fw-bold" id="step5-tab" data-bs-toggle="tab" data-bs-target="#step5" type="button" role="tab">4. Documents & Submit</button>
+                            <button class="nav-link fw-bold" id="step5-tab" data-bs-target="#step5" type="button" role="tab" style="pointer-events: none;">5. Documents & Submit</button>
                         </li>
                     </ul>
                     @if ($errors->any())
@@ -41,8 +41,6 @@
         {{ session('error') }}
     </div>
 @endif
-
-<form action="{{ route('application.submit') }}" method="POST" enctype="multipart/form-data">
 
                     <form action="{{ route('application.submit') }}" method="POST" enctype="multipart/form-data">
                         @csrf
@@ -86,7 +84,14 @@
                                     </div>
                                     <div class="col-md-6">
                                         <label class="form-label">Mobile Number *</label>
-                                        <input type="text" class="form-control" name="phone_number" value="{{ old('phone_number', $application->phone_number ?? '') }}" required>
+                                        <input type="tel" 
+                                               class="form-control" 
+                                               name="phone_number" 
+                                               value="{{ old('phone_number', $application->phone_number ?? '') }}" 
+                                               pattern="[0-9]{10}" 
+                                               maxlength="10" 
+                                               title="Please enter exactly 10 digits (e.g., 0712345678)" 
+                                               required>
                                     </div>
                                     <div class="col-md-6">
                                         <label class="form-label">Email Address (Verified)</label>
@@ -152,10 +157,17 @@
                                             <label class="form-label">Father's Full Name</label>
                                             <input type="text" class="form-control" name="father_name" value="{{ old('father_name', $application->emergencyContacts->where('contact_type', 'father')->first()->full_name ?? '') }}">
                                         </div>
-                                        <div class="col-md-6">
-                                            <label class="form-label">Father's Phone Number</label>
-                                            <input type="text" class="form-control" name="father_phone" value="{{ old('father_phone', $application->emergencyContacts->where('contact_type', 'father')->first()->phone_number ?? '') }}">
-                                        </div>
+                                    <div class="col-md-6"> 
+                                        <label class="form-label">Father's Phone Number *</label>
+                                        <input type="tel" 
+                                               class="form-control" 
+                                               name="phone_number" 
+                                               value="{{ old('father_phone', $application->emergencyContacts->where('contact_type', 'father')->first()->phone_number ?? '') }}" 
+                                               pattern="[0-9]{10}" 
+                                               maxlength="10" 
+                                               title="Please enter exactly 10 digits (e.g., 0712345678)" 
+                                               required>
+                                        
                                     </div>
                                 </div>
 
@@ -169,10 +181,18 @@
                                             <label class="form-label">Mother's Full Name</label>
                                             <input type="text" class="form-control" name="mother_name" value="{{ old('mother_name', $application->emergencyContacts->where('contact_type', 'mother')->first()->full_name ?? '') }}">
                                         </div>
-                                        <div class="col-md-6">
-                                            <label class="form-label">Mother's Phone Number</label>
-                                            <input type="text" class="form-control" name="mother_phone" value="{{ old('mother_phone', $application->emergencyContacts->where('contact_type', 'mother')->first()->phone_number ?? '') }}">
-                                        </div>
+                                        <div class="col-md-6"> 
+                                        <label class="form-label">Mother's Phone Number *</label>
+                                        <input type="tel" 
+                                               class="form-control" 
+                                               name="phone_number" 
+                                               value="{{ old('mother_phone', $application->emergencyContacts->where('contact_type', 'mother')->first()->phone_number ?? '') }}" 
+                                               pattern="[0-9]{10}" 
+                                               maxlength="10" 
+                                               title="Please enter exactly 10 digits (e.g., 0712345678)" 
+                                               required>
+                                        
+                                    </div>
                                     </div>
                                 </div>
 
@@ -297,7 +317,7 @@
     document.addEventListener('DOMContentLoaded', function() {
         
         // Grab the exact checkbox and button using their IDs
-        const consentCheckbox = document.getElementById('mediaConsent');
+        const consentCheckbox = document.getElementById('consent');
         const submitButton = document.getElementById('submitBtn');
 
         // Listen for any 'change' (clicks) on the checkbox
@@ -316,27 +336,51 @@
 <script>
     $(document).ready(function() {
         
-        // Handle "Next" button clicks (Auto-Save + Move Tab)
-        $('.next-tab').click(function() {
+        // Handle "Next" button clicks (Validate -> Auto-Save -> Move Tab)
+        $('.next-tab').click(function(e) {
+            e.preventDefault();
             let nextBtn = $(this);
-            let originalText = nextBtn.html();
+            let currentTab = nextBtn.closest('.tab-pane');
             
-            // Provide a quick loading visual
+            // 1. VALIDATION CHECK
+            let isValid = true;
+            let firstInvalidField = null;
+
+            // Loop through only the required inputs/selects in the CURRENT tab
+            currentTab.find('input[required], select[required]').each(function() {
+                if (!this.checkValidity()) {
+                    isValid = false;
+                    if (!firstInvalidField) firstInvalidField = this;
+                    
+                    // Add Bootstrap's red border to the invalid field
+                    $(this).addClass('is-invalid');
+                } else {
+                    // Remove the red border if they fixed it
+                    $(this).removeClass('is-invalid');
+                }
+            });
+
+            // If validation fails, stop everything and show the error
+            if (!isValid) {
+                // This triggers the browser's native "Please fill out this field" tooltip
+                firstInvalidField.reportValidity();
+                return false; 
+            }
+
+            // 2. IF VALID, PROCEED WITH AUTOSAVE
+            let originalText = nextBtn.html();
             nextBtn.html('<i class="fas fa-spinner fa-spin"></i> Saving...');
             
-            // Grab all form data
             let formData = $('form').serialize();
 
-            // Fire the AJAX request to save the draft
             $.ajax({
                 url: "{{ route('application.autosave') }}",
                 type: "POST",
                 data: formData,
                 success: function(response) {
-                    // Reset button text
                     nextBtn.html(originalText);
                     
-                    // Move to the next tab ONLY after saving
+                    // Move to the next tab ONLY after saving successfully
                     const nextTabLinkEl = $('.nav-pills .active').parent().next('li').find('button');
                     const nextTab = new bootstrap.Tab(nextTabLinkEl);
                     nextTab.show();

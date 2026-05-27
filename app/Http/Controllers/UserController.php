@@ -11,33 +11,47 @@ use Spatie\Permission\Models\Role;
 class UserController extends Controller
 {
     // 1. List all users
-    public function index()
+    public function index(Request $request)
     {
-        // Fetch all users, eager loading their roles to prevent N+1 query issues, and paginate them
-        $users = User::with('roles')->latest()->paginate(15);
-        return view('admin.users.index', compact('users'));
+        $tab = $request->query('tab', 'active');
+
+        if ($tab === 'archived') {
+            // Fetch ONLY soft-deleted users (ignoring super admins so you don't lock yourself out)
+            $users = \App\Models\User::onlyTrashed()->where('role', '!=', 'super_admin')->latest()->paginate(15);
+        } else {
+            // Fetch active users
+            $users = \App\Models\User::where('role', '!=', 'super_admin')->latest()->paginate(15);
+        }
+
+        return view('admin.users.index', compact('users', 'tab'));
     }
 
     // 2. Show the role assignment form
-    public function edit(User $user)
+    public function edit($id)
     {
-        // Get all available roles (Super Admin, Registrar, Trainee, etc.)
-        $roles = Role::all();
+        $user = \App\Models\User::findOrFail($id);
+        
+        // Fetch all dynamic roles we created in the Roles system
+        $roles = \App\Models\Role::all(); 
+        
         return view('admin.users.edit', compact('user', 'roles'));
     }
 
-    // 3. Save the assigned roles
-    public function update(Request $request, User $user)
+    public function update(Request $request, $id)
     {
-        // Validate that roles is an array
+        $user = \App\Models\User::findOrFail($id);
+
+        // 1. Validate ONLY the role, since that is all our form sends
         $request->validate([
-            'roles' => 'nullable|array'
+            'role' => 'required|string',
         ]);
 
-        // Sync the roles to the user. If $request->roles is null (all unchecked), pass an empty array.
-        $user->syncRoles($request->roles ?? []);
+        // 2. Update ONLY the role in the database
+        $user->update([
+            'role' => $request->role,
+        ]);
 
-        return redirect()->route('admin.users.index')->with('success', 'User roles updated successfully.');
+        return redirect()->route('admin.users.index')->with('success', 'User role updated successfully!');
     }
 
     public function create()
@@ -74,5 +88,21 @@ class UserController extends Controller
         }
 
         return redirect()->route('admin.users.index')->with('success', 'Staff member created successfully. Default password is Password@2026');
+    }
+
+    public function archive($id)
+    {
+        $user = \App\Models\User::findOrFail($id);
+        $user->delete(); // This performs the Soft Delete
+
+        return back()->with('success', 'User archived and access revoked.');
+    }
+
+    public function restore($id)
+    {
+        $user = \App\Models\User::withTrashed()->findOrFail($id);
+        $user->restore(); // Brings them back to active status
+
+        return back()->with('success', 'User access restored successfully.');
     }
 }

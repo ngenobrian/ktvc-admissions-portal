@@ -1,6 +1,16 @@
 @extends('layouts.admin')
 
 @section('content')
+@if ($errors->any())
+        <div class="alert alert-danger shadow-sm border-0 mt-3">
+            <h6 class="fw-bold mb-1"><i class="fas fa-exclamation-triangle"></i> Please fix the following errors:</h6>
+            <ul class="mb-0">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
 <div class="container-fluid py-4">
     <div class="mb-4">
         <a href="{{ route('admin.users.index') }}" class="btn btn-secondary btn-sm mb-3">
@@ -18,24 +28,22 @@
                         @csrf
                         @method('PUT')
 
-                        <div class="mb-4">
-                            <label class="form-label fw-bold mb-3">System Roles</label>
-                            
-                            @foreach($roles as $role)
-                                <div class="form-check mb-2">
-                                    <input class="form-check-input" type="checkbox" name="roles[]" value="{{ $role->name }}" id="role_{{ $role->id }}"
-                                        {{ $user->hasRole($role->name) ? 'checked' : '' }}>
-                                    <label class="form-check-label" for="role_{{ $role->id }}">
-                                        {{ $role->name }}
-                                        @if($role->name == 'Super Admin')
-                                            <small class="text-danger d-block">Full system access, including system settings and staff management.</small>
-                                        @elseif($role->name == 'Registrar')
-                                            <small class="text-muted d-block">Can view, approve, and reject trainee applications.</small>
-                                        @endif
-                                    </label>
-                                </div>
-                            @endforeach
-                        </div>
+                        <div class="mb-3">
+    <label class="form-label fw-bold">Assign System Role</label>
+    <select name="role" class="form-select" required>
+        <option value="">-- Select a Role --</option>
+        
+        @if(auth()->user()->role === 'super_admin')
+            <option value="super_admin" {{ $user->role === 'super_admin' ? 'selected' : '' }}>Super Admin</option>
+        @endif
+
+        @foreach($roles as $role)
+            <option value="{{ $role->name }}" {{ $user->role === $role->name ? 'selected' : '' }}>
+                {{ ucfirst($role->name) }}
+            </option>
+        @endforeach
+    </select>
+</div>
 
                         <hr>
 

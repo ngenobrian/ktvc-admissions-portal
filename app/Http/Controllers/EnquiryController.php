@@ -29,12 +29,21 @@ class EnquiryController extends Controller
         return back()->with('success', 'Your enquiry has been sent successfully. We will reply to your email shortly.');
     }
 
-    // 2. ADMIN: List all Enquiries
-    public function index()
+    public function index(Request $request)
     {
-        // Fetch enquiries, showing the newest ones first
-        $enquiries = Enquiry::latest()->paginate(15);
-        return view('admin.enquiries.index', compact('enquiries'));
+        // Check the URL for the 'tab' parameter. Default to 'active' if none exists.
+        $tab = $request->query('tab', 'active');
+        
+        // Determine the database status based on the tab
+        $status = $tab === 'archived' ? 'resolved' : 'pending';
+
+        // Fetch the filtered enquiries
+        $enquiries = \App\Models\Enquiry::where('status', $status)
+            ->latest()
+            ->paginate(15)
+            ->appends(['tab' => $tab]); // This ensures pagination links remember the current tab
+
+        return view('admin.enquiries.index', compact('enquiries', 'tab'));
     }
 
     // 3. ADMIN: Send the Reply

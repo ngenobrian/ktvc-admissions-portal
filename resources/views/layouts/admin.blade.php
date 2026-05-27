@@ -93,62 +93,53 @@
                 <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                     
                     <li class="nav-header">ADMISSIONS</li>
-                    @can('view dashboard analytics')
-                <li class="nav-item">
-                    <a href="{{ route('admin.dashboard') }}" class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
-                        <i class="nav-icon fas fa-tachometer-alt"></i>
-                        <p>Dashboard</p>
-                    </a>
-                </li>
-                @endcan
-
-                @can('review student applications')
-                <li class="nav-item">
-                    <a href="{{ route('admin.applications.pending') }}" class="nav-link {{ request()->routeIs('admin.applications.*') ? 'active' : '' }}">
-                        <i class="nav-icon fas fa-folder-open"></i>
-                        <p>Applications</p>
-                    </a>
-                </li>
-                @endcan
-                    @can('manage student enquiries')
-                <li class="nav-item">
-                    <a href="{{ route('admin.enquiries.index') }}" class="nav-link {{ request()->routeIs('admin.enquiries.*') ? 'active' : '' }}">
-                        <i class="nav-icon fas fa-inbox"></i>
-                        <p>Enquiries</p>
-                    </a>
-                </li>
-                @endcan
-
-                @can('manage system staff')
-                <li class="nav-item">
-                    <a href="{{ route('admin.users.index') }}" class="nav-link {{ request()->routeIs('admin.users.*') ? 'active' : '' }}">
-                        <i class="nav-icon fas fa-users-cog"></i>
-                        <p>Staff Management</p>
-                    </a>
-                </li>
-                @endcan
                     
+                    @if(auth()->user()->hasPermission('view_analytics'))
                     <li class="nav-item">
-                        <a href="{{ route('admin.applications.pending') }}" class="nav-link {{ request()->routeIs('admin.applications.pending') ? 'active' : '' }}">
-                            <i class="nav-icon fas fa-inbox"></i>
-                            <p>Pending Applications</p>
+                        <a href="{{ route('admin.dashboard') }}" class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
+                            <i class="nav-icon fas fa-tachometer-alt"></i>
+                            <p>Dashboard</p>
                         </a>
                     </li>
+                    @endif
+
+                    @if(auth()->user()->hasPermission('review_applications'))
+                    <li class="nav-item">
+                        <a href="{{ route('admin.applications.pending') }}" class="nav-link {{ request()->routeIs('admin.applications.*') ? 'active' : '' }}">
+                            <i class="nav-icon fas fa-folder-open"></i>
+                            <p>Applications</p>
+                        </a>
+                    </li>
+                    @endif
+
+                    @if(auth()->user()->hasPermission('manage_enquiries'))
+                    <li class="nav-item">
+                        <a href="{{ route('admin.enquiries.index') }}" class="nav-link {{ request()->routeIs('admin.enquiries.*') ? 'active' : '' }}">
+                            <i class="nav-icon fas fa-inbox"></i>
+                            <p>Enquiries</p>
+                        </a>
+                    </li>
+                    @endif
+
+                    @if(auth()->user()->hasPermission('manage_staff'))
+                    <li class="nav-item">
+                        <a href="{{ route('admin.users.index') }}" class="nav-link {{ request()->routeIs('admin.users.*') ? 'active' : '' }}">
+                            <i class="nav-icon fas fa-users-cog"></i>
+                            <p>Staff Management</p>
+                        </a>
+                    </li>
+                    @endif
 
                     @if(auth()->user()->role === 'super_admin')
                     <li class="nav-header">SYSTEM ADMINISTRATION</li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link">
-                            <i class="nav-icon fas fa-users-cog"></i>
+                         <a href="{{ route('admin.roles.index') }}" class="nav-link {{ request()->routeIs('admin.roles.*') ? 'active' : '' }}">
+                            <i class="nav-icon fas fa-user-shield"></i>
                             <p>Manage Staff Roles</p>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link">
-                            <i class="nav-icon fas fa-file-excel"></i>
-                            <p>KUCCPS Import</p>
-                        </a>
-                    </li>
+                        </li>
                     @endif
                 </ul>
             </nav>
