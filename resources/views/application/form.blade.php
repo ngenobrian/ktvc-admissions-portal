@@ -63,6 +63,10 @@
                                         <input type="text" class="form-control" name="surname" value="{{ old('surname', $application->surname ?? '') }}" required>
                                     </div>
                                     <div class="col-md-4">
+                                     <label class="form-label">National ID / Birth Cert No. *</label>
+                                     <input type="text" class="form-control" name="id_number" value="{{ old('id_number', $application->id_number ?? '') }}" required>
+                                 </div>
+                                    <div class="col-md-4">
                                         <label class="form-label">Gender *</label>
                                         <select class="form-select" name="gender" required>
                                         <option value="">Select...</option>

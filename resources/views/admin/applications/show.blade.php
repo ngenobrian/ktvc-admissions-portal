@@ -71,6 +71,10 @@
                             <label class="text-muted small fw-bold mb-1">Surname</label>
                             <p class="mb-0 fw-bold">{{ $application->surname ?? 'N/A' }}</p>
                         </div>
+                        <div class="col-md-4 mb-3">
+                         <label class="text-muted small fw-bold mb-1">National ID / Birth Cert</label>
+                         <p class="mb-0 fw-bold">{{ $application->id_number ?? 'N/A' }}</p>
+                     </div>
                         
                         <div class="col-md-4 mb-3">
                             <label class="text-muted small fw-bold mb-1">Gender</label>

@@ -18,6 +18,7 @@ class Application extends Model
         'first_name',
         'middle_name',
         'surname',
+        'id_number',
         'gender',
         'dob',
         'marital_status',

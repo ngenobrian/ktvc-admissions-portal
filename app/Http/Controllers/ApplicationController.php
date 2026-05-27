@@ -47,6 +47,7 @@ class ApplicationController extends Controller
             'first_name' => 'required|string|max:255',
             'middle_name' => 'nullable|string|max:255',
             'surname' => 'required|string|max:255',
+            'id_number' => 'required|string|max:50',
             'gender' => 'required|in:Male,Female,Other',
             'dob' => 'required|date',
             'marital_status' => 'required|in:Single,Married',
@@ -106,6 +107,7 @@ class ApplicationController extends Controller
                 'first_name' => $request->first_name,
                 'middle_name' => $request->middle_name,
                 'surname' => $request->surname,
+                'id_number' => $request->id_number,
                 'gender' => $request->gender,
                 'dob' => $request->dob,
                 'marital_status' => $request->marital_status,
@@ -206,7 +208,8 @@ class ApplicationController extends Controller
 
         // 1. Save Main Details
         $application->update($request->only([
-            'first_name', 'middle_name', 'surname', 'gender', 'dob', 'marital_status', 'phone_number',
+            'first_name', 'middle_name', 'surname', 'id_number', 
+           'gender', 'dob', 'marital_status', 'phone_number',
             'kcse_grade', 'course_level', 'course_name' // <-- The 3 new fields added here
         ]));
 
