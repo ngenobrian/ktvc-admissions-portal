@@ -37,13 +37,17 @@
                 </div>
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-md-6 mb-3">
+                        <div class="col-md-4 mb-3">
                             <label class="text-muted small fw-bold mb-1">Course Applied For</label>
                             <p class="fs-5 mb-0 fw-bold">{{ $application->course_name ?? 'N/A' }}</p>
                         </div>
-                        <div class="col-md-6 mb-3">
+                        <div class="col-md-4 mb-3">
                             <label class="text-muted small fw-bold mb-1">Course Level</label>
-                            <p class="fs-5 mb-0"><span class="badge bg-secondary">{{ $application->course_level ?? 'N/A' }}</span></p>
+                            <p class="fs-5 mb-0"><span class="badge bg-secondary">Level {{ $application->course_level ?? 'N/A' }}</span></p>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="text-muted small fw-bold mb-1">KCSE/KCPE Grade</label>
+                            <p class="fs-5 mb-0"><span class="badge bg-info text-dark border border-info">{{ $application->kcse_grade ?? 'N/A' }}</span></p>
                         </div>
                     </div>
                 </div>
@@ -105,6 +109,96 @@
                         <div class="col-md-6 mb-3">
                             <label class="text-muted small fw-bold mb-1">Next of Kin Contact</label>
                             <p class="mb-0">{{ $application->next_of_kin_phone ?? 'N/A' }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card shadow-sm border-0 mb-4">
+                <div class="card-header bg-white pb-0 border-bottom-0 pt-3">
+                    <h5 class="fw-bold"><i class="fas fa-map-marker-alt text-secondary"></i> Location Details</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label class="text-muted small fw-bold mb-1">P.O. Box</label>
+                            <p class="mb-0">{{ $application->address->po_box ?? 'N/A' }} - {{ $application->address->town_city ?? 'N/A' }}</p>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="text-muted small fw-bold mb-1">County</label>
+                            <p class="mb-0">{{ $application->address->home_county ?? 'N/A' }}</p>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="text-muted small fw-bold mb-1">Sub-County</label>
+                            <p class="mb-0">{{ $application->address->sub_county ?? 'N/A' }}</p>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="text-muted small fw-bold mb-1">Location / Ward</label>
+                            <p class="mb-0">{{ $application->address->location ?? 'N/A' }}</p>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="text-muted small fw-bold mb-1">Sub-Location</label>
+                            <p class="mb-0">{{ $application->address->sub_location ?? 'N/A' }}</p>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="text-muted small fw-bold mb-1">Village</label>
+                            <p class="mb-0">{{ $application->address->village ?? 'N/A' }}</p>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="text-muted small fw-bold mb-1">Chief's Name</label>
+                            <p class="mb-0">{{ $application->address->chief_name ?? 'N/A' }}</p>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="text-muted small fw-bold mb-1">Chief's Phone</label>
+                            <p class="mb-0">{{ $application->address->chief_phone ?? 'N/A' }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card shadow-sm border-0 mb-4">
+                <div class="card-header bg-white pb-0 border-bottom-0 pt-3">
+                    <h5 class="fw-bold"><i class="fas fa-users text-secondary"></i> Family & Guardians</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        @php 
+                            $father = $application->emergencyContacts->where('contact_type', 'father')->first();
+                            $mother = $application->emergencyContacts->where('contact_type', 'mother')->first();
+                            $guardian = $application->emergencyContacts->where('contact_type', 'guardian')->first();
+                            $sponsor = $application->emergencyContacts->where('contact_type', 'fee_sponsor')->first();
+                        @endphp
+                        
+                        <div class="col-md-6 mb-3">
+                            <label class="text-muted small fw-bold mb-1">Father's Details</label>
+                            @if($father && $father->is_alive)
+                                <p class="mb-0 fw-bold">{{ strtoupper($father->full_name) }}</p>
+                                <p class="mb-0 small text-muted"><i class="fas fa-phone-alt"></i> {{ $father->phone_number ?? 'No Phone' }}</p>
+                            @else
+                                <p class="mb-0 text-danger fw-bold">DECEASED / N/A</p>
+                            @endif
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="text-muted small fw-bold mb-1">Mother's Details</label>
+                            @if($mother && $mother->is_alive)
+                                <p class="mb-0 fw-bold">{{ strtoupper($mother->full_name) }}</p>
+                                <p class="mb-0 small text-muted"><i class="fas fa-phone-alt"></i> {{ $mother->phone_number ?? 'No Phone' }}</p>
+                            @else
+                                <p class="mb-0 text-danger fw-bold">DECEASED / N/A</p>
+                            @endif
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="text-muted small fw-bold mb-1">Guardian (Emergency Contact)</label>
+                            <p class="mb-0 fw-bold">{{ strtoupper($guardian->full_name ?? 'N/A') }}</p>
+                            <p class="mb-0 small text-muted"><i class="fas fa-phone-alt"></i> {{ $guardian->phone_number ?? 'N/A' }}</p>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="text-muted small fw-bold mb-1">Fee Sponsor</label>
+                            <p class="mb-0 fw-bold">{{ strtoupper($sponsor->full_name ?? 'N/A') }}</p>
+                            <p class="mb-0 small text-muted"><i class="fas fa-phone-alt"></i> {{ $sponsor->phone_number ?? 'N/A' }}</p>
                         </div>
                     </div>
                 </div>
