@@ -315,9 +315,14 @@
                             <i class="fas fa-undo"></i> Revert to Pending
                         </button>
 
-                        <button type="button" class="btn btn-outline-danger fw-bold w-100 py-2" {{ $application->status === 'rejected' ? 'disabled' : '' }} data-bs-toggle="modal" data-bs-target="#rejectModal">
-                         <i class="fas fa-times"></i> Deny Application
-                     </button>
+                        <button type="button" 
+                                id="denyBtnTrigger"
+                                class="btn btn-outline-danger fw-bold w-100 py-2" 
+                                {{ $application->status === 'rejected' ? 'disabled' : '' }} 
+                                data-toggle="modal" data-target="#rejectModal" 
+                                data-bs-toggle="modal" data-bs-target="#rejectModal">
+                            <i class="fas fa-times"></i> Deny Application
+                        </button>
 
                     </form>
                 </div>
@@ -359,4 +364,16 @@
          </div>
      </div>
  </div>
+ <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if jQuery is loaded (common in Admin dashboards)
+            if (window.jQuery) {
+                $('#denyBtnTrigger').on('click', function(e) {
+                    e.preventDefault();
+                    $('#rejectModal').modal('show');
+                });
+            }
+        });
+    </script>
+ 
 @endsection
