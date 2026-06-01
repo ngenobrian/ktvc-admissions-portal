@@ -315,9 +315,9 @@
                             <i class="fas fa-undo"></i> Revert to Pending
                         </button>
 
-                        <button type="submit" name="status" value="rejected" class="btn btn-outline-danger fw-bold w-100 py-2" {{ $application->status === 'rejected' ? 'disabled' : '' }} onclick="return confirm('Are you sure you want to reject this application?');">
-                            <i class="fas fa-times"></i> Deny Application
-                        </button>
+                        <button type="button" class="btn btn-outline-danger fw-bold w-100 py-2" {{ $application->status === 'rejected' ? 'disabled' : '' }} data-bs-toggle="modal" data-bs-target="#rejectModal">
+                         <i class="fas fa-times"></i> Deny Application
+                     </button>
 
                     </form>
                 </div>
@@ -329,4 +329,34 @@
 
     </div>
 </div>
+<div class="modal fade" id="rejectModal" tabindex="-1" aria-labelledby="rejectModalLabel" aria-hidden="true">
+     <div class="modal-dialog">
+         <div class="modal-content">
+             <form action="{{ route('admin.applications.status', $application->id) }}" method="POST">
+                 @csrf
+                 <input type="hidden" name="status" value="rejected">
+
+                 <div class="modal-header bg-danger text-white">
+                     <h5 class="modal-title" id="rejectModalLabel"><i class="fas fa-exclamation-triangle"></i> Reject Application</h5>
+                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                 </div>
+
+                 <div class="modal-body">
+                     <p>You are about to reject the application for <strong>{{ strtoupper($application->first_name . ' ' . $application->surname) }}</strong>.</p>
+
+                     <div class="mb-3">
+                         <label for="rejection_reason" class="form-label fw-bold">Reason for Rejection *</label>
+                         <textarea class="form-control" id="rejection_reason" name="rejection_reason" rows="4" placeholder="e.g., The KCSE result slip uploaded is blurry. Please upload a clear scanned copy." required></textarea>
+                         <div class="form-text text-muted">This reason will be emailed directly to the applicant so they can make amendments.</div>
+                     </div>
+                 </div>
+
+                 <div class="modal-footer">
+                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                     <button type="submit" class="btn btn-danger fw-bold"><i class="fas fa-times-circle"></i> Confirm Rejection</button>
+                 </div>
+             </form>
+         </div>
+     </div>
+ </div>
 @endsection

@@ -67,38 +67,34 @@ class AdminController extends Controller
     // 4. Update the status and send emails
     public function updateStatus(Request $request, $id)
     {
+        $application = \App\Models\Application::findOrFail($id);
+        
+        // 1. Validate the input (Ensure reason is provided IF rejected)
         $request->validate([
-            'status' => 'required|in:approved,rejected,pending',
-            'rejection_reason' => 'required_if:status,rejected|string|max:1000|nullable', 
+            'status' => 'required|in:pending,approved,rejected',
+            'rejection_reason' => 'required_if:status,rejected|nullable|string'
         ]);
 
-        $application = Application::findOrFail($id);
+        // 2. Update the status
         $application->status = $request->status;
         
+        // 3. Handle the rejection reason
         if ($request->status === 'rejected') {
             $application->rejection_reason = $request->rejection_reason;
         } else {
-            // Clear rejection reason if approved or set back to pending
+            // Clear the reason if the application is approved or reverted to pending
             $application->rejection_reason = null; 
         }
-
+        
         $application->save();
 
-        // Send Email Notification if Approved or Rejected
-        if (in_array($request->status, ['approved', 'rejected']) && $application->user && $application->user->email) {
-            try {
-                Mail::to($application->user->email)->send(new ApplicationReviewed($application));
-            } catch (\Exception $e) {
-                Log::error('Mail failed to send: ' . $e->getMessage());
-                return back()->with('success', 'Application ' . $request->status . ', but the email notification failed to send.');
-            }
+        // 4. Send Email Notification to the Trainee
+        if (in_array($request->status, ['approved', 'rejected'])) {
+            \Illuminate\Support\Facades\Mail::to($application->user->email)
+                ->send(new \App\Mail\ApplicationReviewed($application));
         }
 
-        $message = $request->status === 'approved' 
-            ? 'Application Approved Successfully! Notification sent.' 
-            : 'Application status updated to ' . ucfirst($request->status) . '.';
-            
-        return back()->with('success', $message);
+        return back()->with('success', 'Application status updated to ' . strtoupper($request->status) . ' successfully.');
     }
 
     // 5. Export Approved Students to Excel

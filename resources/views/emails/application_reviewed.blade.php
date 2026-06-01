@@ -19,29 +19,20 @@
         <p>Dear <strong>{{ strtoupper($application->first_name) }}</strong>,</p>
 
         @if($application->status === 'approved')
-            <p>We are thrilled to inform you that your application to study <strong>{{ strtoupper($application->course_name) }}</strong> has been officially approved!</p>
-            
-            <p>Your official Admission Number is: <strong>{{ $application->admission_number }}</strong></p>
-
-            <p>You can now log in to the student portal to download your official PDF Admission Letter, which contains important details regarding your reporting date and required documents.</p>
-
-            <div style="text-align: center; margin: 30px 0;">
-                <a href="{{ route('login') }}" class="btn">Log In to Download Letter</a>
-            </div>
+            <h2 style="color: #28a745;">Congratulations!</h2>
+            <p>Your admission application to Kipkabus Technical and Vocational College has been approved.</p>
+            <p>Log in to your dashboard to download your official Admission Letter.</p>
             
         @elseif($application->status === 'rejected')
-            <p>Your admission application has been reviewed by the Registrar. However, it requires some corrections before it can be approved.</p>
-
-            <div class="alert">
-                <strong>Reason for Return:</strong><br>
+            <h2 style="color: #dc3545;">Action Required on Your Application</h2>
+            <p>Your application requires amendments before it can be approved. The registrar has provided the following instructions:</p>
+            
+            <div style="background-color: #f8d7da; padding: 15px; border-left: 5px solid #dc3545; border-radius: 5px; color: #721c24; margin: 20px 0;">
+                <strong>Reason:</strong><br>
                 {{ $application->rejection_reason }}
             </div>
-
-            <p>Please log back into the admission portal, correct the issues mentioned above, and resubmit your application.</p>
-
-            <div style="text-align: center; margin: 30px 0;">
-                <a href="{{ route('login') }}" class="btn">Log In to Resubmit</a>
-            </div>
+            
+            <p>Please log in to your KTVC Admissions Portal dashboard to update your details and resubmit your application.</p>
         @endif
 
         <p>Best regards,<br>

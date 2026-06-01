@@ -6,7 +6,7 @@
         <div class="alert alert-warning shadow-sm border-0 mb-4 d-flex align-items-center">
             <i class="fas fa-exclamation-triangle fs-4 me-3 mr-3"></i> 
             <div>
-                <strong>Action Required:</strong> You have not uploaded a profile picture yet. Please click the camera icon next to your name to upload a passport-style photo for your Student ID.
+                <strong>Action Required:</strong> You have not uploaded a profile picture yet. Please click the camera icon next to your name to upload a passport-style photo.
             </div>
         </div>
     @endif
