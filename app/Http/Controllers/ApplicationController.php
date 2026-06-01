@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Models\Application;
-use ConvertApi\ConvertApi;
+
 
 class ApplicationController extends Controller
 {
@@ -394,7 +394,7 @@ class ApplicationController extends Controller
         $templateProcessor->setValue('CHIEF_PHONE', $address->chief_phone ?? 'N/A');
 
         // ==========================================
-        // SAVE AS DOCX & CONVERT TO PDF VIA API
+        // SAVE AS DOCX & CONVERT TO PDF VIA ILOVEPDF
         // ==========================================
 
         // 1. Save the filled Word document temporarily
@@ -402,20 +402,26 @@ class ApplicationController extends Controller
         $tempDocxPath = storage_path('app/' . $docxFileName);
         $templateProcessor->saveAs($tempDocxPath);
 
-        // 2. Set up ConvertAPI securely using your .env file
-        ConvertApi::setApiCredentials(env('CONVERT_API_SECRET'));
-
-        // 3. Define where the final PDF should be saved
-        $pdfFileName = 'Admission_Letter_' . str_replace('/', '_', $application->admission_number) . '.pdf';
+        // 2. Determine the exact path where iLovePDF will save the file
+        // iLovePDF automatically keeps the original filename but changes the extension to .pdf
+        $pdfFileName = str_replace('.docx', '.pdf', $docxFileName);
         $tempPdfPath = storage_path('app/' . $pdfFileName);
 
         try {
-            // 4. Send the DOCX to ConvertAPI and save the resulting PDF
-            $result = ConvertApi::convert('pdf', [
-                'File' => $tempDocxPath,
-            ], 'docx');
-            
-            $result->getFile()->save($tempPdfPath);
+            // 3. Initialize iLovePDF with credentials from your .env file
+            $ilovepdf = new \Ilovepdf\Ilovepdf(env('ILOVEPDF_PUBLIC_KEY'), env('ILOVEPDF_SECRET_KEY'));
+
+            // 4. Create a new "Office to PDF" conversion task
+            $myTask = $ilovepdf->newTask('officepdf');
+
+            // 5. Add our temporary DOCX file to the task
+            $myTask->addFile($tempDocxPath);
+
+            // 6. Execute the conversion on iLovePDF's servers
+            $myTask->execute();
+
+            // 7. Download the resulting PDF back to our server's storage/app directory
+            $myTask->download(storage_path('app/'));
 
         } catch (\Exception $e) {
             // If the API fails, delete the temp DOCX and show an error
@@ -423,13 +429,13 @@ class ApplicationController extends Controller
             return redirect()->route('dashboard')->with('error', 'Document conversion failed: ' . $e->getMessage());
         }
 
-        // 5. Clean up the temporary DOCX file from your server
+        // 8. Clean up the temporary DOCX file from your server
         if (file_exists($tempDocxPath)) {
             unlink($tempDocxPath);
         }
 
-        // 6. Download the perfect PDF and delete it immediately after sending
-        return response()->download($tempPdfPath)->deleteFileAfterSend(true);
+        // 9. Download the perfect PDF to the student and delete it from the server immediately after
+        return response()->download($tempPdfPath, 'KTVC_Admission_Letter.pdf')->deleteFileAfterSend(true);
     }
 
     // Handle Profile Picture Upload
