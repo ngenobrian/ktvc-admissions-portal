@@ -30,6 +30,8 @@ class User extends Authenticatable
     'phone_number',
     'job_title',
     'department',
+    'otp_code',              
+    'otp_expires_at',
     'must_change_password'
 
 ];

@@ -238,7 +238,7 @@
                                     </div>
                                     <div class="col-md-6">
                                         <label class="form-label">Home County *</label>
-                                        <input type="text" class="form-control" name="county" value="{{ old('county', $application->address->home_county ?? '') }}" required>
+                                        <input type="text" class="form-control" name="county" value="{{ old('county', $application->address->county ?? '') }}" required>
                                     </div>
                                     <div class="col-md-6">
                                         <label class="form-label">Sub-County *</label>
