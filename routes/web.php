@@ -17,10 +17,10 @@ Route::post('/enquiry/submit', [App\Http\Controllers\EnquiryController::class, '
 
 // Authentication Routes (Only for guests)
 Route::middleware('guest')->group(function () {
-    Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
+    //Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
     Route::post('/register', [AuthController::class, 'register']);
     
-    Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
+    //Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
     Route::post('/login', [AuthController::class, 'login']);
     // OTP Routes
     Route::get('/verify-otp', [App\Http\Controllers\OtpController::class, 'showVerifyForm'])->name('otp.verify');

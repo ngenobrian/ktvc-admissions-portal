@@ -21,12 +21,12 @@
 
                         <!-- Login ID (Email OR Index Number) -->
                         <div class="mb-3">
-                            <label for="login_id" class="form-label fw-bold">Email Address OR Index Number</label>
+                            <label for="login_id" class="form-label fw-bold">Email Address</label>
                             <input type="text" class="form-control @error('login_id') is-invalid @enderror" id="login_id" name="login_id" value="{{ old('login_id') }}" required autofocus placeholder="e.g. email@example.com OR 123456789/2025">
                             @error('login_id')
                                 <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                             @enderror
-                            <div class="form-text">KUCCPS students: Use your Index Number. Self-sponsored: Use your Email.</div>
+                            
                         </div>
 
                         <!-- Password -->
