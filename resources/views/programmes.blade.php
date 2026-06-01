@@ -269,8 +269,355 @@
                             <td>CDACC </td>
                             <td><a href="{{ auth()->check() ? route('dashboard') : route('login') }}" class="btn btn-sm btn-success fw-bold px-3">Apply</a></td>
                         </tr>
+                        <tr>
+                            <td>Automotive Mechanics Level 3 </td>
+                            <td>KCPE</td>
+                            <td>1 Module </td>
+                            <td>JAN/MAY/SEPT </td>
+                            <td>CDACC </td>
+                            <td><a href="{{ auth()->check() ? route('dashboard') : route('login') }}" class="btn btn-sm btn-success fw-bold px-3">Apply</a></td>
+                        </tr>
+                        <tr>
+                            <td>Welding Level 3  </td>
+                            <td>KCPE</td>
+                            <td>1 Module </td>
+                            <td>JAN/MAY/SEPT </td>
+                            <td>CDACC </td>
+                            <td><a href="{{ auth()->check() ? route('dashboard') : route('login') }}" class="btn btn-sm btn-success fw-bold px-3">Apply</a></td>
+                        </tr>
                         
                         
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Department 3: Computing & Informatics -->
+    <div class="card shadow-sm border-0 mb-5">
+        <div class="card-header bg-dark text-white">
+            <h4 class="mb-0">Department of Computing and Informatics </h4>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover table-striped mb-0 align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Course</th>
+                            <th>Minimum Entry Requirements</th>
+                            <th>Duration</th>
+                            <th>Intake Period</th>
+                            <th>Exam Body</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Information Communication Technology Level 6 </td>
+                            <td>KCSE C- (MINUS) & Above </td>
+                            <td>7 Modules </td>
+                            <td>JAN/MAY/SEPT </td>
+                            <td>CDACC </td>
+                            <td><a href="{{ auth()->check() ? route('dashboard') : route('login') }}" class="btn btn-sm btn-success fw-bold px-3">Apply</a></td>
+                        </tr>
+                        
+                        <tr>
+                            <td>Information Communication Technology Level 5  </td>
+                            <td>KCSE D (PLAIN) & D+ (PLUS) </td>
+                            <td>4 Modules </td>
+                            <td>JAN/MAY/SEPT </td>
+                            <td>CDACC </td>
+                            <td><a href="{{ auth()->check() ? route('dashboard') : route('login') }}" class="btn btn-sm btn-success fw-bold px-3">Apply</a></td>
+                        </tr>
+                        
+                        
+                        
+                        
+                        <tr>
+                            <td>Information  Communication Technology Level 4 </td>
+                            <td>KCSE D- (MINUS) & E </td>
+                            <td>2 Modules </td>
+                            <td>JAN/MAY/SEPT </td>
+                            <td>CDACC </td>
+                            <td><a href="{{ auth()->check() ? route('dashboard') : route('login') }}" class="btn btn-sm btn-success fw-bold px-3">Apply</a></td>
+                        </tr>
+                       
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <!-- Department 4: Hospitality -->
+    <div class="card shadow-sm border-0 mb-5">
+        <div class="card-header bg-dark text-white">
+            <h4 class="mb-0">Department of Hospitality, Fashion Design and Cosmetology </h4>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover table-striped mb-0 align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Course</th>
+                            <th>Minimum Entry Requirements</th>
+                            <th>Duration</th>
+                            <th>Intake Period</th>
+                            <th>Exam Body</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Food and Beverage Level 6  </td>
+                            <td>KCSE C- (MINUS) & Above </td>
+                            <td>7 Modules </td>
+                            <td>JAN/MAY/SEPT </td>
+                            <td>CDACC </td>
+                            <td><a href="{{ auth()->check() ? route('dashboard') : route('login') }}" class="btn btn-sm btn-success fw-bold px-3">Apply</a></td>
+                        </tr>
+                        <tr>
+                            <td>Fashion Design Level 6  </td>
+                            <td>KCSE C- (MINUS) & Above </td>
+                            <td>7 Modules </td>
+                            <td>JAN/MAY/SEPT </td>
+                            <td>CDACC </td>
+                            <td><a href="{{ auth()->check() ? route('dashboard') : route('login') }}" class="btn btn-sm btn-success fw-bold px-3">Apply</a></td>
+                        </tr>
+                        <tr>
+                            <td>Cosmetology (Hairdressing & Beauty Therapy) Level 6 </td>
+                            <td>KCSE C- (MINUS) & Above </td>
+                            <td>7 Modules </td>
+                            <td>JAN/MAY/SEPT </td>
+                            <td>CDACC </td>
+                            <td><a href="{{ auth()->check() ? route('dashboard') : route('login') }}" class="btn btn-sm btn-success fw-bold px-3">Apply</a></td>
+                        </tr>
+                        
+                        <tr>
+                            <td>Food and Beverage Level 5  </td>
+                            <td>KCSE D (PLAIN) & D+ (PLUS) </td>
+                            <td>4 Modules </td>
+                            <td>JAN/MAY/SEPT </td>
+                            <td>CDACC </td>
+                            <td><a href="{{ auth()->check() ? route('dashboard') : route('login') }}" class="btn btn-sm btn-success fw-bold px-3">Apply</a></td>
+                        </tr>
+                        <tr>
+                            <td>Fashion Design Level 5 </td>
+                            <td>KCSE D (PLAIN) & D+ (PLUS) </td>
+                            <td>4 Modules </td>
+                            <td>JAN/MAY/SEPT </td>
+                            <td>CDACC </td>
+                            <td><a href="{{ auth()->check() ? route('dashboard') : route('login') }}" class="btn btn-sm btn-success fw-bold px-3">Apply</a></td>
+                        </tr>
+                        <tr>
+                            <td>Cosmetology (Hairdressing & Beauty Therapy) Level 5 </td>
+                            <td>KCSE D (PLAIN) & D+ (PLUS) </td>
+                            <td>4 Modules </td>
+                            <td>JAN/MAY/SEPT </td>
+                            <td>CDACC </td>
+                            <td><a href="{{ auth()->check() ? route('dashboard') : route('login') }}" class="btn btn-sm btn-success fw-bold px-3">Apply</a></td>
+                        </tr>
+                        
+                        <tr>
+                            <td>Food and Beverage Level 4  </td>
+                            <td>KCSE D- (MINUS) & E </td>
+                            <td>2 Modules </td>
+                            <td>JAN/MAY/SEPT </td>
+                            <td>CDACC </td>
+                            <td><a href="{{ auth()->check() ? route('dashboard') : route('login') }}" class="btn btn-sm btn-success fw-bold px-3">Apply</a></td>
+                        </tr>
+                        <tr>
+                            <td>Fashion Design Level 4  </td>
+                            <td>KCSE D- (MINUS) & E </td>
+                            <td>2 Modules </td>
+                            <td>JAN/MAY/SEPT </td>
+                            <td>CDACC </td>
+                            <td><a href="{{ auth()->check() ? route('dashboard') : route('login') }}" class="btn btn-sm btn-success fw-bold px-3">Apply</a></td>
+                        </tr>
+                        <tr>
+                            <td>Cosmetology (Hairdressing & Beauty Therapy) Level 4 </td>
+                            <td>KCSE D- (MINUS) & E </td>
+                            <td>2 Modules </td>
+                            <td>JAN/MAY/SEPT </td>
+                            <td>CDACC </td>
+                            <td><a href="{{ auth()->check() ? route('dashboard') : route('login') }}" class="btn btn-sm btn-success fw-bold px-3">Apply</a></td>
+                        </tr>
+                        
+                        <tr>
+                            <td>Food and Beverage Level 3  </td>
+                            <td>KCPE</td>
+                            <td>1 Module </td>
+                            <td>JAN/MAY/SEPT </td>
+                            <td>CDACC </td>
+                            <td><a href="{{ auth()->check() ? route('dashboard') : route('login') }}" class="btn btn-sm btn-success fw-bold px-3">Apply</a></td>
+                        </tr>
+                        <tr>
+                            <td>Fashion Design Level 3   </td>
+                            <td>KCPE</td>
+                            <td>1 Module </td>
+                            <td>JAN/MAY/SEPT </td>
+                            <td>CDACC </td>
+                            <td><a href="{{ auth()->check() ? route('dashboard') : route('login') }}" class="btn btn-sm btn-success fw-bold px-3">Apply</a></td>
+                        </tr>
+                        <tr>
+                            <td>Cosmetology (Hairdressing & Beauty Therapy) Level 3   </td>
+                            <td>KCPE</td>
+                            <td>1 Module </td>
+                            <td>JAN/MAY/SEPT </td>
+                            <td>CDACC </td>
+                            <td><a href="{{ auth()->check() ? route('dashboard') : route('login') }}" class="btn btn-sm btn-success fw-bold px-3">Apply</a></td>
+                        </tr>
+                        
+                        
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <!-- Department 4: Electrical -->
+    <div class="card shadow-sm border-0 mb-5">
+        <div class="card-header bg-dark text-white">
+            <h4 class="mb-0">Department of Electrical and Electronics Engineering </h4>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover table-striped mb-0 align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Course</th>
+                            <th>Minimum Entry Requirements</th>
+                            <th>Duration</th>
+                            <th>Intake Period</th>
+                            <th>Exam Body</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Electrical Engineering (Power Option) Level 6   </td>
+                            <td>KCSE C- (MINUS) & Above </td>
+                            <td>7 Modules </td>
+                            <td>JAN/MAY/SEPT </td>
+                            <td>CDACC </td>
+                            <td><a href="{{ auth()->check() ? route('dashboard') : route('login') }}" class="btn btn-sm btn-success fw-bold px-3">Apply</a></td>
+                        </tr>
+                        
+                        <tr>
+                            <td>Electrical Operation (Power) Level 5 </td>
+                            <td>KCSE D (PLAIN) & D+ (PLUS) </td>
+                            <td>4 Modules </td>
+                            <td>JAN/MAY/SEPT </td>
+                            <td>CDACC </td>
+                            <td><a href="{{ auth()->check() ? route('dashboard') : route('login') }}" class="btn btn-sm btn-success fw-bold px-3">Apply</a></td>
+                        </tr>
+                        <tr>
+                            <td>Solar PV System Installation Level 5 </td>
+                            <td>KCSE D (PLAIN) & D+ (PLUS) </td>
+                            <td>4 Modules </td>
+                            <td>JAN/MAY/SEPT </td>
+                            <td>CDACC </td>
+                            <td><a href="{{ auth()->check() ? route('dashboard') : route('login') }}" class="btn btn-sm btn-success fw-bold px-3">Apply</a></td>
+                        </tr>
+                        
+                        <tr>
+                            <td>Electrical Installation Level 4 </td>
+                            <td>KCSE D- (MINUS) & E </td>
+                            <td>2 Modules </td>
+                            <td>JAN/MAY/SEPT </td>
+                            <td>CDACC </td>
+                            <td><a href="{{ auth()->check() ? route('dashboard') : route('login') }}" class="btn btn-sm btn-success fw-bold px-3">Apply</a></td>
+                        </tr>
+                        <tr>
+                            <td>Solar PV System Installation Level 4 </td>
+                            <td>KCSE D- (MINUS) & E </td>
+                            <td>2 Modules </td>
+                            <td>JAN/MAY/SEPT </td>
+                            <td>CDACC </td>
+                            <td><a href="{{ auth()->check() ? route('dashboard') : route('login') }}" class="btn btn-sm btn-success fw-bold px-3">Apply</a></td>
+                        </tr>
+                        
+                        <tr>
+                            <td>Electrical Installation Level 3 </td>
+                            <td>KCPE</td>
+                            <td>1 Module </td>
+                            <td>JAN/MAY/SEPT </td>
+                            <td>CDACC </td>
+                            <td><a href="{{ auth()->check() ? route('dashboard') : route('login') }}" class="btn btn-sm btn-success fw-bold px-3">Apply</a></td>
+                        </tr>
+                        <tr>
+                            <td>Solar PV System Installation Level 3 </td>
+                            <td>KCPE</td>
+                            <td>1 Module </td>
+                            <td>JAN/MAY/SEPT </td>
+                            <td>CDACC </td>
+                            <td><a href="{{ auth()->check() ? route('dashboard') : route('login') }}" class="btn btn-sm btn-success fw-bold px-3">Apply</a></td>
+                        </tr>
+                        
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <!-- Department 4: Electrical -->
+    <div class="card shadow-sm border-0 mb-5">
+        <div class="card-header bg-dark text-white">
+            <h4 class="mb-0">Department of Business and Liberal Studies </h4>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover table-striped mb-0 align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Course</th>
+                            <th>Minimum Entry Requirements</th>
+                            <th>Duration</th>
+                            <th>Intake Period</th>
+                            <th>Exam Body</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Social Work & Community Development Level 6 </td>
+                            <td>KCSE C- (MINUS) & Above </td>
+                            <td>7 Modules </td>
+                            <td>JAN/MAY/SEPT </td>
+                            <td>CDACC </td>
+                            <td><a href="{{ auth()->check() ? route('dashboard') : route('login') }}" class="btn btn-sm btn-success fw-bold px-3">Apply</a></td>
+                        </tr>
+                        <tr>
+                            <td>Office Administration Level 6 </td>
+                            <td>KCSE C- (MINUS) & Above </td>
+                            <td>7 Modules </td>
+                            <td>JAN/MAY/SEPT </td>
+                            <td>CDACC </td>
+                            <td><a href="{{ auth()->check() ? route('dashboard') : route('login') }}" class="btn btn-sm btn-success fw-bold px-3">Apply</a></td>
+                        </tr>
+                        
+                        <tr>
+                            <td>Social Work & Community Development Level 5 </td>
+                            <td>KCSE D (PLAIN) & D+ (PLUS) </td>
+                            <td>4 Modules </td>
+                            <td>JAN/MAY/SEPT </td>
+                            <td>CDACC </td>
+                            <td><a href="{{ auth()->check() ? route('dashboard') : route('login') }}" class="btn btn-sm btn-success fw-bold px-3">Apply</a></td>
+                        </tr>
+                        <tr>
+                            <td>Office Administration Level 5 </td>
+                            <td>KCSE D (PLAIN) & D+ (PLUS) </td>
+                            <td>4 Modules </td>
+                            <td>JAN/MAY/SEPT </td>
+                            <td>CDACC </td>
+                            <td><a href="{{ auth()->check() ? route('dashboard') : route('login') }}" class="btn btn-sm btn-success fw-bold px-3">Apply</a></td>
+                        </tr>
+                        
+                        <tr>
+                            <td>Office Assistance Level 4 </td>
+                            <td>KCSE D- (MINUS) & E </td>
+                            <td>2 Modules </td>
+                            <td>JAN/MAY/SEPT </td>
+                            <td>CDACC </td>
+                            <td><a href="{{ auth()->check() ? route('dashboard') : route('login') }}" class="btn btn-sm btn-success fw-bold px-3">Apply</a></td>
+                        </tr>
+                         
                     </tbody>
                 </table>
             </div>
@@ -287,6 +634,19 @@
             <li><strong>LEVEL 4:</strong> 2 Modules + Industrial Attachment </li>
             <li><strong>LEVEL 3:</strong> 1 Module + Industrial Attachment </li>
         </ul>
+    </div>
+
+    <div class="alert alert-info shadow-sm mt-4">
+        <h5 class="fw-bold"><i class="fas fa-info-circle"></i> Short Courses Offered </h5>
+        <p class="mb-2">All short courses have a continuous intake</p>
+        <ul class="mb-0">
+            <li><strong>Driving</strong>
+            <li><strong>Computer Packages:
+            <li><strong>Baking</strong>
+        </ul>
+    </div>
+    <div class="alert alert-info shadow-sm mt-4">
+        <h5 class="fw-bold"><i class="fas fa-info-circle"></i>Application for Recognition of Prior Learning (RPL) is open.</h5>
     </div>
 
 </div>
