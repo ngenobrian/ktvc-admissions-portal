@@ -73,7 +73,7 @@ class ApplicationController extends Controller
             // Step 3: Location
             'po_box' => 'required|string|max:255',
             'town_city' => 'required|string|max:255',
-            'county' => 'required|string|max:255',
+            'home_county' => 'required|string|max:255',
             'sub_county' => 'required|string|max:255',
             'location' => 'required|string|max:255',
             'sub_location' => 'required|string|max:255',
@@ -123,7 +123,7 @@ class ApplicationController extends Controller
             ]);
 
             // Save Address
-            $application->address()->create([
+            $application->address()->updateOrCreate([
                 'po_box' => $request->po_box,
                 'town_city' => $request->town_city,
                 'home_county' => $request->county,
@@ -136,7 +136,7 @@ class ApplicationController extends Controller
             ]);
 
             // Save Emergency Contacts (Father)
-            $application->emergencyContacts()->create([
+            $application->emergencyContacts()->updateOrCreate([
                 'contact_type' => 'father',
                 'is_alive' => $request->has('father_alive'),
                 'full_name' => $request->has('father_alive') ? $request->father_name : null,
@@ -144,7 +144,7 @@ class ApplicationController extends Controller
             ]);
 
             // Save Emergency Contacts (Mother)
-            $application->emergencyContacts()->create([
+            $application->emergencyContacts()->updateOrCreate([
                 'contact_type' => 'mother',
                 'is_alive' => $request->has('mother_alive'),
                 'full_name' => $request->has('mother_alive') ? $request->mother_name : null,
@@ -152,13 +152,13 @@ class ApplicationController extends Controller
             ]);
 
             // Save Guardian & Sponsor
-            $application->emergencyContacts()->create([
+            $application->emergencyContacts()->updateOrCreate([
                 'contact_type' => 'guardian',
                 'is_alive' => true,
                 'full_name' => $request->guardian_name,
                 'phone_number' => $request->guardian_phone,
             ]);
-            $application->emergencyContacts()->create([
+            $application->emergencyContacts()->updateOrCreate([
                 'contact_type' => 'fee_sponsor',
                 'is_alive' => true,
                 'full_name' => $request->sponsor_name,
