@@ -106,14 +106,6 @@
                             <label class="text-muted small fw-bold mb-1">Email Address</label>
                             <p class="mb-0">{{ $application->user->email ?? 'N/A' }}</p>
                         </div>
-                        <div class="col-md-6 mb-3">
-                            <label class="text-muted small fw-bold mb-1">Postal Address</label>
-                            <p class="mb-0">{{ $application->town_city ?? 'N/A' }}</p>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label class="text-muted small fw-bold mb-1">Next of Kin Contact</label>
-                            <p class="mb-0">{{ $application->next_of_kin_phone ?? 'N/A' }}</p>
-                        </div>
                     </div>
                 </div>
             </div>
