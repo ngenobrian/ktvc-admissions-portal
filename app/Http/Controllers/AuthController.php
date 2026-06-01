@@ -60,6 +60,7 @@ class AuthController extends Controller
 
     // Handle the Login Request
     // Handle the Login Request
+    // Handle the Login Request
     public function login(Request $request)
     {
         // 1. Validate the input (We use 'login_id' to accept either Email or Index Number)
@@ -84,6 +85,21 @@ class AuthController extends Controller
             $request->session()->regenerate();
             
             $user = Auth::user();
+
+            // 🚨 THE NEW GATEKEEPER: Check if OTP is verified 🚨
+            // We check if the email_verified_at timestamp is empty
+            if (is_null($user->email_verified_at)) {
+                
+                // 1. Log them back out immediately
+                Auth::logout();
+                
+                // 2. Store their email securely in the session for the OTP page
+                $request->session()->put('verify_email', $user->email);
+
+                // 3. Kick them back to the verification screen
+                return redirect()->route('otp.verify')
+                    ->with('error', 'Access Denied: You must verify your email address using the OTP code before logging in.');
+            }
 
             // Check if this is a KUCCPS student who needs to change their password
             if ($user->requires_password_change) {
