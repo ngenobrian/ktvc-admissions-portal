@@ -55,13 +55,13 @@ class OtpController extends Controller
         }
 
         // 4. Check if the provided OTP matches the database
-        if ((string) $user->otp !== (string) $request->otp) {
+        if ((string) $user->otp_code !== (string) $request->otp) {
             return back()->with('error', 'The verification code you entered is incorrect.');
         }
 
         // 5. SUCCESS! Mark the email as verified and clear the OTP for security
         $user->email_verified_at = now();
-        $user->otp = null;
+        $user->otp_code = null;
         $user->save();
 
         // 6. Log the user into the application

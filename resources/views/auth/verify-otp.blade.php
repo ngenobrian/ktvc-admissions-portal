@@ -16,6 +16,12 @@
                         </div>
                     @endif
 
+                    @if (session('error'))
+                        <div class="alert alert-danger fw-bold">
+                            <i class="fas fa-exclamation-triangle"></i> {{ session('error') }}
+                        </div>
+                    @endif
+
                     <p class="text-muted mb-4">We sent a 6-digit verification code to <strong>{{ $email }}</strong>. Please enter it below to activate your account.</p>
 
                     <form method="POST" action="{{ route('otp.verify') }}">
