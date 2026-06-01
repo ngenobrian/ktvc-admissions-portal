@@ -24,30 +24,48 @@ class OtpController extends Controller
     // Process the code entered by the user
     public function verify(Request $request)
     {
+        // 1. Validate the incoming OTP from the form
         $request->validate([
-            'otp' => 'required|numeric',
+            'otp' => 'required|string',
         ]);
 
-        $user = \Illuminate\Support\Facades\Auth::user();
+        // 2. Retrieve the email we temporarily stored in the session
+        $email = $request->session()->get('verify_email');
 
-        // 1. Check if the OTP matches (using loosely typed == to avoid string/integer conflicts)
-        if ($user->otp_code != $request->otp) {
-            return back()->withErrors(['otp' => 'The code you entered is incorrect.']);
+        // Safety Check: If the session expired or is missing, send them back to login
+        if (!$email) {
+            return redirect()->route('login')->with('error', 'Verification session expired. Please log in to request a new code.');
         }
 
-        // 2. Check if the OTP has expired
-        if (\Carbon\Carbon::now()->isAfter($user->otp_expires_at)) {
-            return back()->withErrors(['otp' => 'This code has expired. Please request a new one.']);
+        // 3. Find the user in the database
+        $user = \App\Models\User::where('email', $email)->first();
+
+        if (!$user) {
+            return redirect()->route('login')->with('error', 'User not found.');
         }
 
-        // 3. Success! Clear the OTP so it can't be reused, and mark the user as verified
-        $user->update([
-            'otp_code' => null,
-            'otp_expires_at' => null,
-            'email_verified_at' => now(), // Optional: if you are using Laravel's MustVerifyEmail
-        ]);
+        // 4. Check if the provided OTP matches the database
+        if ((string) $user->otp !== (string) $request->otp) {
+            return back()->with('error', 'The verification code you entered is incorrect.');
+        }
 
-        return redirect()->route('dashboard')->with('success', 'Email verified successfully! Welcome to KTVC.');
+        // 5. SUCCESS! Mark the email as verified and clear the OTP for security
+        $user->email_verified_at = now();
+        $user->otp = null;
+        $user->save();
+
+        // 6. Log the user into the application
+        \Illuminate\Support\Facades\Auth::login($user);
+
+        // 7. Clear the temporary email from the session so it can't be reused
+        $request->session()->forget('verify_email');
+
+        // 8. TRAFFIC DIRECTOR: Send them to the correct dashboard
+        if ($user->role && strtolower($user->role) !== 'trainee') {
+            return redirect()->route('admin.dashboard')->with('success', 'Email verified successfully! Welcome to the Admin Portal.');
+        }
+
+        return redirect()->route('dashboard')->with('success', 'Email verified successfully! Welcome to the KTVC Admissions Portal.');
     }
 
     // Generate and send a new code

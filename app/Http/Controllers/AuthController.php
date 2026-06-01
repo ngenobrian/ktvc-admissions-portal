@@ -45,11 +45,13 @@ class AuthController extends Controller
         // Send the email
         Mail::to($user->email)->send(new SendOtpMail($otp));
 
-        // 4. Log the user in immediately
-        Auth::login($user);
+        // 🚨 REMOVE Auth::login($user); 🚨
+        
+        // INSTEAD: Store their email in the session so the OTP page knows who they are
+        $request->session()->put('verify_email', $user->email);
 
-        // Redirect to the new OTP verification screen instead of the dashboard
-        return redirect()->route('otp.verify');
+        // Redirect to the OTP verification screen
+        return redirect()->route('otp.verify')->with('success', 'Account created! Please check your email for the verification code.');
     }
 
     // Show the Login Page

@@ -22,6 +22,10 @@ Route::middleware('guest')->group(function () {
     
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
     Route::post('/login', [AuthController::class, 'login']);
+    // OTP Routes
+    Route::get('/verify-otp', [App\Http\Controllers\OtpController::class, 'showVerifyForm'])->name('otp.verify');
+    Route::post('/verify-otp', [App\Http\Controllers\OtpController::class, 'verify']);
+    Route::post('/resend-otp', [App\Http\Controllers\OtpController::class, 'resend'])->name('otp.resend');
 
     // Password Reset Routes
 Route::get('/forgot-password', [PasswordResetController::class, 'requestForm'])->middleware('guest')->name('password.request');
@@ -36,10 +40,7 @@ Route::middleware('auth')->group(function () {
     // Forced Password Routes
     Route::get('/force-password-change', [App\Http\Controllers\Auth\ForcedPasswordController::class, 'show'])->name('password.force.change');
     Route::post('/force-password-change', [App\Http\Controllers\Auth\ForcedPasswordController::class, 'update'])->name('password.force.update');
-    // OTP Routes
-    Route::get('/verify-otp', [App\Http\Controllers\OtpController::class, 'showVerifyForm'])->name('otp.verify');
-    Route::post('/verify-otp', [App\Http\Controllers\OtpController::class, 'verify']);
-    Route::post('/resend-otp', [App\Http\Controllers\OtpController::class, 'resend'])->name('otp.resend');
+    
 
     Route::post('/logout', [App\Http\Controllers\AuthController::class, 'logout'])->name('logout');
     
