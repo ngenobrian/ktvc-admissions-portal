@@ -126,7 +126,7 @@ class ApplicationController extends Controller
             $application->address()->updateOrCreate([
                 'po_box' => $request->po_box,
                 'town_city' => $request->town_city,
-                'home_county' => $request->county,
+                'home_county' => $request->home_county,
                 'sub_county' => $request->sub_county,
                 'location' => $request->location,
                 'sub_location' => $request->sub_location,
@@ -214,10 +214,10 @@ class ApplicationController extends Controller
         ]));
 
         // 2. Save Address Details (if any exist in the request)
-        if ($request->hasAny(['po_box', 'town_city', 'county'])) {
+        if ($request->hasAny(['po_box', 'town_city', 'home_county'])) {
             $application->address()->updateOrCreate(
                 ['application_id' => $application->id],
-                $request->only(['po_box', 'town_city', 'county', 'sub_county', 'location', 'sub_location', 'village', 'chief_name', 'chief_phone'])
+                $request->only(['po_box', 'town_city', 'home_county', 'sub_county', 'location', 'sub_location', 'village', 'chief_name', 'chief_phone'])
             );
         }
 
