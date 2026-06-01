@@ -16,7 +16,7 @@
                         </div>
                     @endif
 
-                    <p class="text-muted mb-4">We sent a 6-digit verification code to <strong>{{ auth()->user()->email }}</strong>. Please enter it below to activate your account.</p>
+                    <p class="text-muted mb-4">We sent a 6-digit verification code to <strong>{{ $email }}</strong>. Please enter it below to activate your account.</p>
 
                     <form method="POST" action="{{ route('otp.verify') }}">
                         @csrf

@@ -11,14 +11,24 @@ use Carbon\Carbon;
 class OtpController extends Controller
 {
     // Show the verification screen
-    public function showVerifyForm()
+    public function showVerifyForm(Request $request)
     {
-        // If already verified, send them to dashboard
-        if (Auth::user()->email_verified_at) {
+        // 1. If a fully verified user tries to access this page, send them away
+        if (\Illuminate\Support\Facades\Auth::check() && \Illuminate\Support\Facades\Auth::user()->email_verified_at) {
             return redirect()->route('dashboard');
         }
 
-        return view('auth.verify-otp');
+        // 2. Retrieve the email from the session (set during registration or login)
+        $email = $request->session()->get('verify_email');
+
+        // 3. If there is no email in the session, they shouldn't be here
+        if (!$email) {
+            return redirect()->route('login')->with('error', 'No verification session found. Please log in or register.');
+        }
+
+        // 4. Pass the email to the view so you can display "Code sent to..."
+        return view('auth.verify-otp', compact('email')); 
+        // Note: Change 'auth.verify-otp' if your blade file has a different name!
     }
 
     // Process the code entered by the user
